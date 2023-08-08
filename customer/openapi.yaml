@@ -1,0 +1,208 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Customer API
+    version: 0.0.1
+paths:
+    /customer/estimate-price/{origin}/{destination}:
+        get:
+            tags:
+                - Customer
+            description: 价格预估
+            operationId: Customer_EstimatePrice
+            parameters:
+                - name: origin
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: destination
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: code
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: message
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/EstimatePriceResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /customer/get-verify-code/{telephone}:
+        get:
+            tags:
+                - Customer
+            description: 获取验证码
+            operationId: Customer_GetVerifiyCode
+            parameters:
+                - name: telephone
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetVerifyCodeResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /customer/login:
+        post:
+            tags:
+                - Customer
+            description: 用户登录
+            operationId: Customer_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /customer/loginout:
+        get:
+            tags:
+                - Customer
+            description: 退出
+            operationId: Customer_Loginout
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginoutResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        EstimatePriceResp:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                message:
+                    type: string
+                origin:
+                    type: string
+                destination:
+                    type: string
+                price:
+                    type: integer
+                    format: int64
+        GetVerifyCodeResp:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                message:
+                    type: string
+                verifyCode:
+                    type: string
+                verifyCodeTime:
+                    type: integer
+                    format: int64
+                verifyCodeLife:
+                    type: integer
+                    format: int32
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginReq:
+            type: object
+            properties:
+                telephone:
+                    type: string
+                verifyCode:
+                    type: string
+            description: 登录的消息
+        LoginResp:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                message:
+                    type: string
+                token:
+                    type: string
+                    description: token登录表示，特殊字符串 jwt表示形式
+                tokenCreateAt:
+                    type: integer
+                    format: int64
+                tokenLife:
+                    type: integer
+                    format: int32
+        LoginoutResp:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                message:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+tags:
+    - name: Customer
